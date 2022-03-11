@@ -1,3 +1,6 @@
+# Descripción
+Stack de docker para poder levantar los servicios de **registry** y **registri web ui** para gestionar repositorios privados de contenedores docker.
+
 # Instalación
 Para instalar el repository junto a la ui simplemente hay que copiar el archivo `.env.example` a `.env` y rellenar con los 
 datos de configuración de tu entorno
