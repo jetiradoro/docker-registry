@@ -1,0 +1,42 @@
+version: '3.9'
+services:
+  app:
+    image: registry:2
+    container_name: registry
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${REGISTRY_PORT}:5000"
+    volumes:
+      - ./registry/data:/var/lib/registry
+      - ./registry/auth:/auth
+      - ./registry/config.yml:/etc/docker/registry/config.yml
+    networks:
+      docker-net:
+  ui:
+    image: parabuzzle/craneoperator
+    container_name: registry-ui
+    restart: always
+    env_file:
+      - .env
+    environment:
+      VIRTUAL_HOST: ${DOCKER_DOMAIN}
+      REGISTRY_HOST: app
+      REGISTRY_PORT: ${REGISTRY_PORT}
+      REGISTRY_PROTOCOL: ${REGISTRY_PROTOCOL}
+      SSL_VERIFY: ${REGISTRY_SSL_VERIFY}
+      REGISTRY_USERNAME: ${REGISTRY_USERNAME}
+      REGISTRY_PASSWORD: ${REGISTRY_PASSWORD}
+      USERNAME: ${UI_USERNAME}
+      PASSWORD: ${UI_PASSWORD}
+      REGISTRY_ALLOW_DELETE : ${REGISTRY_ALLOW_DELETE}
+    depends_on:
+      - app
+    networks:
+      docker-net:
+
+
+networks:
+  docker-net:
+    external: ${DOCKER_EXTERNAL_NET}
